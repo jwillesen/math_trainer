@@ -31,9 +31,6 @@ module.exports = {
 
       {test: /\.css$/, loader: 'style-loader!css-loader'},
 
-      // make sure bootstrap can find jquery
-      {test: /bootstrap\/js\//, loader: 'imports?jQuery=jquery'},
-
       // needed to load bootstrap's css
       {test: /\.woff2?$/, loader: 'file', query: {name: '../../assets/fonts/[hash].[ext]'}},
       {test: /\.ttf$/, loader: 'file', query: {name: '../../assets/fonts/[hash].[ext]'}},

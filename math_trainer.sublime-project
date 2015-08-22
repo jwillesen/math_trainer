@@ -2,7 +2,7 @@
 	"folders":
 	[
 		{
-            "folder_exclude_patterns": ["tmp", "node_modules", "generated"],
+            "folder_exclude_patterns": ["tmp", "node_modules", "generated", "public/assets"],
 			"path": "."
 		}
 	]
