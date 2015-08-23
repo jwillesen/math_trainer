@@ -1,7 +1,7 @@
 import React from 'react'
 import {Button} from 'react-bootstrap'
 
-export default class Configuration extends React.Component
+export default class Challenge extends React.Component
 {
   render () {
     return (

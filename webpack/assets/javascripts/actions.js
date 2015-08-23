@@ -5,3 +5,7 @@ export const startChallenge = createAction(START_CHALLENGE)
 
 export const QUIT_CHALLENGE = 'QUIT_CHALLENGE'
 export const quitChallenge = createAction(QUIT_CHALLENGE)
+
+export const CHANGE_OPERAND = 'CHANGE_OPERAND'
+export const changeOperand = createAction(CHANGE_OPERAND,
+  (operandIndex, operandValue) => ({operandIndex, operandValue}))

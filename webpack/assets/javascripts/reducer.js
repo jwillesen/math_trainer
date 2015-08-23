@@ -1,12 +1,25 @@
 import {combineReducers} from 'redux'
-import * as actions from './actions'
 import {handleActions} from 'redux-actions'
+import * as actions from './actions'
 import modes from './modes'
 
+const defaultOperands = [5, 5]
+
+function newOperands (state, action) {
+  const {operandIndex, operandValue} = action.payload
+  const newState = [...state]
+  newState[operandIndex] = operandValue
+  return newState
+}
+
+const configurationReducers = {
+  operands: handleActions({
+    [actions.CHANGE_OPERAND]: newOperands,
+  }, defaultOperands),
+}
+
 const reducers = {
-  configuration (state = {}, action) {
-    return state
-  },
+  configuration: combineReducers(configurationReducers),
 
   mode: handleActions({
     [actions.START_CHALLENGE]: () => modes.CHALLENGE,

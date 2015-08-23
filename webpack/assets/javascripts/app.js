@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {startChallenge, quitChallenge} from './actions'
+import * as actions from './actions'
 import modes from './modes'
 import Configuration from 'views/configuration'
 import Challenge from 'views/challenge'
@@ -10,7 +10,11 @@ export class App extends React.Component {
     const mode = this.props.state.mode
     let screen = null
     if (mode === modes.CONFIGURE) {
-      screen = <Configuration startChallenge={this.props.startChallenge} />
+      screen = <Configuration
+        configuration={this.props.state.configuration}
+        changeOperand={this.props.changeOperand}
+        startChallenge={this.props.startChallenge}
+      />
     } else if (mode === modes.CHALLENGE) {
       screen = <Challenge quitChallenge={this.props.quitChallenge} />
     } else {
@@ -25,8 +29,6 @@ export class App extends React.Component {
   }
 }
 
-const boundActions = {startChallenge, quitChallenge}
-
 export const ConnectedApp = connect(
-  state => ({state}), boundActions)(App)
+  state => ({state}), actions)(App)
 export default ConnectedApp
