@@ -1,12 +1,11 @@
 import React, {PropTypes} from 'react'
-import {Pagination} from 'react-bootstrap'
+import {Button, ButtonGroup} from 'react-bootstrap'
 
 export default class OperandSelector extends React.Component {
   static get propTypes () {
     return {
       minOperandValue: PropTypes.number,
       maxOperandValue: PropTypes.number,
-      operandIndex: PropTypes.number.isRequired,
       operandValue: PropTypes.number.isRequired,
       operandChange: PropTypes.func.isRequired,
     }
@@ -20,19 +19,38 @@ export default class OperandSelector extends React.Component {
     }
   }
 
-  handleOperandChange (event, selectedEvent) {
-    const operandValue = selectedEvent.eventKey
-    this.props.operandChange(this.props.operandIndex, operandValue)
+  handleButtonClick (operandValue, event) {
+    this.props.operandChange(operandValue)
+  }
+
+  buttonSet () {
+    const minValue = this.props.minOperandValue
+    const maxValue = this.props.maxOperandValue
+    const numButtons = maxValue - minValue + 1
+    const buttonValues = Array.apply(null, {length: numButtons})
+      .map(Number.call, Number)
+      .map(value => value + minValue)
+    return buttonValues.map((value) => {
+      const [bsStyle, bsActive, bsPressed] = (value === this.props.operandValue) ?
+        ['primary', true, 'true'] : ['default', false, 'false']
+      return (
+        <Button key={value}
+          onClick={this.handleButtonClick.bind(this, value)}
+          bsSize='large'
+          bsStyle={bsStyle}
+          active={bsActive}
+          aria-pressed={bsPressed} >
+          {value}
+        </Button>
+      )
+    })
   }
 
   render () {
     return (
-      <Pagination
-        bsSize='large'
-        items={this.props.maxOperandValue}
-        activePage={this.props.operandValue}
-        onSelect={this.handleOperandChange.bind(this)}
-      />
+      <ButtonGroup>
+        {this.buttonSet()}
+      </ButtonGroup>
     )
   }
 }
