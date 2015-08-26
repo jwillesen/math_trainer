@@ -15,13 +15,11 @@ export default class OperandSelector extends React.Component {
   }
 
   renderButton (glyph, value) {
-    const [bsStyle, bsActive, bsPressed] = (this.props.operatorValue === value) ?
-      ['primary', true, 'true'] : ['default', false, 'false']
+    const [bsActive, bsPressed] = (this.props.operatorValue === value) ?
+      [true, 'true'] : [false, 'false']
     return (
       <Button
         onClick={this.props.operatorChange.bind(null, value)}
-        bsSize='large'
-        bsStyle={bsStyle}
         active={bsActive}
         aria-pressed={bsPressed}
       >
@@ -32,7 +30,7 @@ export default class OperandSelector extends React.Component {
 
   render () {
     return (
-      <ButtonGroup>
+      <ButtonGroup bsSize='large'>
         {this.renderButton('plus', OPERATORS.plus)}
         {this.renderButton('minus', OPERATORS.minus)}
         {this.renderButton('remove', OPERATORS.times)}

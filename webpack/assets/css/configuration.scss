@@ -1,0 +1,8 @@
+$selected-button-color: #5cb85c;
+
+.configuration .btn-group .active {
+  background-color: $selected-button-color;
+  &:focus {
+    background-color: $selected-button-color;
+  }
+}

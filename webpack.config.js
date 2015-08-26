@@ -8,7 +8,10 @@ module.exports = {
     path: 'public/assets/javascripts',
   },
   resolve: {
-    root: [path.join(__dirname, 'webpack/assets/javascripts')],
+    root: [
+      path.join(__dirname, 'webpack/assets/javascripts'),
+      path.join(__dirname, 'webpack/assets/css'),
+    ],
     extensions: ['', '.js', '.jsx', '.json'],
   },
   module: {
@@ -29,6 +32,7 @@ module.exports = {
         },
       },
 
+      {test: /\.scss$/, loader: 'style!css!sass'},
       {test: /\.css$/, loader: 'style-loader!css-loader'},
 
       // needed to load bootstrap's css

@@ -31,13 +31,11 @@ export default class OperandSelector extends React.Component {
       .map(Number.call, Number)
       .map(value => value + minValue)
     return buttonValues.map((value) => {
-      const [bsStyle, bsActive, bsPressed] = (value === this.props.operandValue) ?
-        ['primary', true, 'true'] : ['default', false, 'false']
+      const [bsActive, bsPressed] = (value === this.props.operandValue) ?
+        [true, 'true'] : [false, 'false']
       return (
         <Button key={value}
           onClick={this.handleButtonClick.bind(this, value)}
-          bsSize='large'
-          bsStyle={bsStyle}
           active={bsActive}
           aria-pressed={bsPressed} >
           {value}
@@ -48,7 +46,7 @@ export default class OperandSelector extends React.Component {
 
   render () {
     return (
-      <ButtonGroup>
+      <ButtonGroup bsSize='large'>
         {this.buttonSet()}
       </ButtonGroup>
     )
