@@ -17,7 +17,10 @@ export class App extends React.Component {
         startChallenge={this.props.startChallenge}
       />
     } else if (mode === MODES.challenge) {
-      screen = <Challenge quitChallenge={this.props.quitChallenge} />
+      screen = <Challenge
+        challenge={this.props.state.challenge}
+        quitChallenge={this.props.quitChallenge}
+      />
     } else {
       screen = <h1>Error, Unknown Mode</h1>
     }

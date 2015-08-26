@@ -9,8 +9,10 @@ export default class Configuration extends React.Component
 {
   static get propTypes () {
     return {
-      changeOperand: PropTypes.func.required,
-      changeOperator: PropTypes.func.required,
+      configuration: PropTypes.object.isRequired,
+      startChallenge: PropTypes.func.isRequired,
+      changeOperand: PropTypes.func.isRequired,
+      changeOperator: PropTypes.func.isRequired,
     }
   }
 
