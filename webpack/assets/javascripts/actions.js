@@ -9,3 +9,6 @@ export const quitChallenge = createAction(QUIT_CHALLENGE)
 export const CHANGE_OPERAND = 'CHANGE_OPERAND'
 export const changeOperand = createAction(CHANGE_OPERAND,
   (operandIndex, operandValue) => ({operandIndex, operandValue}))
+
+export const CHANGE_OPERATOR = 'CHANGE_OPERATOR'
+export const changeOperator = createAction(CHANGE_OPERATOR)

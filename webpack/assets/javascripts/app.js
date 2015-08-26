@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import * as actions from './actions'
-import modes from './modes'
+import {MODES} from './constants'
 import Configuration from 'views/configuration'
 import Challenge from 'views/challenge'
 
@@ -9,13 +9,14 @@ export class App extends React.Component {
   render () {
     const mode = this.props.state.mode
     let screen = null
-    if (mode === modes.CONFIGURE) {
+    if (mode === MODES.configure) {
       screen = <Configuration
         configuration={this.props.state.configuration}
         changeOperand={this.props.changeOperand}
+        changeOperator={this.props.changeOperator}
         startChallenge={this.props.startChallenge}
       />
-    } else if (mode === modes.CHALLENGE) {
+    } else if (mode === MODES.challenge) {
       screen = <Challenge quitChallenge={this.props.quitChallenge} />
     } else {
       screen = <h1>Error, Unknown Mode</h1>
