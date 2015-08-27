@@ -34,6 +34,7 @@ const challengeReducers = {
   }, {
     operands: [1, 1],
     operator: OPERATORS.plus,
+    answer: 2,
   }),
 }
 
@@ -46,7 +47,6 @@ const reducers = {
     [actions.START_CHALLENGE]: () => MODES.challenge,
     [actions.QUIT_CHALLENGE]: () => MODES.configure,
   }, MODES.configure),
-
 }
 
 const reducer = combineReducers(reducers)

@@ -15,6 +15,13 @@ export default class ProblemDisplay extends React.Component {
       </Row><Row>
         <Col className='operator' xsOffset={5} xs={1}>{this.props.problem.operator}</Col>
         <Col className='operand' xs={1}>{this.props.problem.operands[1]}</Col>
+      </Row><Row>
+        <Col className='answer-line' xsOffset={5} xs={3}>
+        </Col>
+      </Row><Row>
+        <Col className='answer' xsOffset={6} xs={1}>
+          {this.props.problem.answer}
+        </Col>
       </Row></Grid>
     )
   }

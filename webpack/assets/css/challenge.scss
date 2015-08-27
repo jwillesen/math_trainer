@@ -1,6 +1,10 @@
 .problem {
-  .operand, .operator {
+  .operand, .operator, .answer {
     line-height: 1;
     font-size: 100px;
+  }
+
+  .answer-line {
+    border-top: solid;
   }
 }
