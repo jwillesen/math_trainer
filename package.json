@@ -31,6 +31,7 @@
     "babel-loader": "^5.3.2",
     "babel-runtime": "^5.8.20",
     "bootstrap": "^3.3.5",
+    "chance": "^0.7.6",
     "css-loader": "^0.16.0",
     "eslint": "^1.2.1",
     "eslint-config-standard": "^4.1.0",

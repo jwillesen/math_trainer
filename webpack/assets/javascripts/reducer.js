@@ -4,6 +4,11 @@ import * as actions from './actions'
 import {MODES, OPERATORS} from './constants'
 
 const defaultOperands = [5, 5]
+const defaultProblem = {
+  operands: [1, 1],
+  operator: OPERATORS.plus,
+  answer: 2,
+}
 
 function fsaIdentity (state, action) { return action.payload }
 
@@ -12,10 +17,6 @@ function newOperands (state, action) {
   const newState = [...state]
   newState[operandIndex] = operandValue
   return newState
-}
-
-function generateProblem (state, action) {
-  return state
 }
 
 const configurationReducers = {
@@ -30,12 +31,8 @@ const configurationReducers = {
 
 const challengeReducers = {
   problem: handleActions({
-    [actions.START_CHALLENGE]: generateProblem,
-  }, {
-    operands: [1, 1],
-    operator: OPERATORS.plus,
-    answer: 2,
-  }),
+    [actions.NEW_PROBLEM]: fsaIdentity,
+  }, defaultProblem),
 }
 
 const reducers = {
