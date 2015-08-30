@@ -1,17 +1,24 @@
 import {createAction} from 'redux-actions'
 import Chance from 'chance'
+import deepEqual from 'deep-equal'
 import {OPERATORS} from './constants'
 
 const stdrng = new Chance()
 
-export function generateRandomProblem (configuration, rng = stdrng) {
+export function generateRandomProblem (configuration, priorProblem, rng = stdrng) {
   const problemGenerators = {
     [OPERATORS.plus]: generateAdditionProblem,
     [OPERATORS.minus]: generateSubtractionProblem,
     [OPERATORS.times]: generateMultiplicationProblem,
   }
   const problemGenerator = problemGenerators[configuration.operator]
-  return problemGenerator(configuration, rng)
+  let newProblem = problemGenerator(configuration, rng)
+  // avoid displaying the same problem twice
+  for (let i = 0; i < 5 && deepEqual(newProblem, priorProblem); ++i) {
+    newProblem = problemGenerator(configuration, rng)
+  }
+
+  return newProblem
 }
 
 function generateOperands (configuration, rng) {
@@ -53,7 +60,10 @@ export function generateMultiplicationProblem (configuration, rng) {
 export const NEW_PROBLEM = 'NEW_PROBLEM'
 export function newProblem () {
   return (dispatch, getState) => {
-    dispatch(createAction(NEW_PROBLEM)(generateRandomProblem(getState().configuration)))
+    const state = getState()
+    dispatch(createAction(NEW_PROBLEM)(
+      generateRandomProblem(state.configuration, state.challenge.problem))
+    )
   }
 }
 
