@@ -19,6 +19,7 @@ export class App extends React.Component {
     } else if (mode === MODES.challenge) {
       screen = <Challenge
         challenge={this.props.state.challenge}
+        toggleShowAnswer={this.props.toggleShowAnswer}
         newProblem={this.props.newProblem}
         quitChallenge={this.props.quitChallenge}
       />

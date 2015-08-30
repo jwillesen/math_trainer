@@ -39,3 +39,6 @@ export const changeOperand = createAction(CHANGE_OPERAND,
 
 export const CHANGE_OPERATOR = 'CHANGE_OPERATOR'
 export const changeOperator = createAction(CHANGE_OPERATOR)
+
+export const TOGGLE_SHOW_ANSWER = 'TOGGLE_SHOW_ANSWER'
+export const toggleShowAnswer = createAction(TOGGLE_SHOW_ANSWER)

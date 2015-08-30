@@ -33,6 +33,10 @@ const challengeReducers = {
   problem: handleActions({
     [actions.NEW_PROBLEM]: fsaIdentity,
   }, defaultProblem),
+  showAnswer: handleActions({
+    [actions.TOGGLE_SHOW_ANSWER]: state => !state,
+    [actions.NEW_PROBLEM]: () => false,
+  }, false),
 }
 
 const reducers = {
