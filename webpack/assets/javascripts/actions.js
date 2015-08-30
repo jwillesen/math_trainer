@@ -1,18 +1,53 @@
 import {createAction} from 'redux-actions'
 import Chance from 'chance'
+import {OPERATORS} from './constants'
 
 const stdrng = new Chance()
 
 export function generateRandomProblem (configuration, rng = stdrng) {
-  const operands = [
+  const problemGenerators = {
+    [OPERATORS.plus]: generateAdditionProblem,
+    [OPERATORS.minus]: generateSubtractionProblem,
+    [OPERATORS.times]: generateMultiplicationProblem,
+  }
+  const problemGenerator = problemGenerators[configuration.operator]
+  return problemGenerator(configuration, rng)
+}
+
+function generateOperands (configuration, rng) {
+  return [
     rng.integer({min: 1, max: configuration.operands[0]}),
     rng.integer({min: 1, max: configuration.operands[1]}),
   ]
-  return {
-    operands,
-    operator: configuration.operator,
-    answer: operands.reduce((memo, next) => memo + next),
-  }
+}
+
+function makeProblemState (operands, operator, answer) {
+  return {operands, operator, answer}
+}
+
+export function generateAdditionProblem (configuration, rng) {
+  const operands = generateOperands(configuration, rng)
+  return makeProblemState(
+    operands, configuration.operator,
+    operands.reduce((memo, next) => memo + next)
+  )
+}
+
+export function generateSubtractionProblem (configuration, rng) {
+  const operands = generateOperands(configuration, rng)
+  if (operands[0] < operands[1]) operands.reverse()
+  return makeProblemState(
+    operands, configuration.operator,
+    operands.reduce((memo, next) => memo - next)
+  )
+}
+
+export function generateMultiplicationProblem (configuration, rng) {
+  const operands = generateOperands(configuration, rng)
+  return makeProblemState(
+    operands, configuration.operator,
+    operands.reduce((memo, next) => memo * next)
+  )
 }
 
 export const NEW_PROBLEM = 'NEW_PROBLEM'

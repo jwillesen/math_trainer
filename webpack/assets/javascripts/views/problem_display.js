@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react'
 import classNames from 'classnames'
+import {OPERATORS} from '../constants'
 
 export default class ProblemDisplay extends React.Component {
   static get propTypes () {
@@ -15,11 +16,20 @@ export default class ProblemDisplay extends React.Component {
     }
   }
 
+  operatorText () {
+    switch (this.props.problem.operator) {
+      case OPERATORS.plus: return '\u002B' // plus sign
+      case OPERATORS.minus: return '\u2212' // minus sign
+      case OPERATORS.times: return '\u00D7' // multiplication sign
+      default: return '?'
+    }
+  }
+
   render () {
     return (
       <div className='problem'>
         <div className='operators'>
-          <div className='operator'>{this.props.problem.operator}</div>
+          <div className='operator'>{this.operatorText()}</div>
         </div>
         <div className='numbers'>
           <span className='operand'>{this.props.problem.operands[0]}</span>
