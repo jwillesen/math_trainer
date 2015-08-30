@@ -1,5 +1,4 @@
 import React, {PropTypes} from 'react'
-import {Grid, Row, Col} from 'react-bootstrap'
 
 export default class ProblemDisplay extends React.Component {
   static get propTypes () {
@@ -10,19 +9,17 @@ export default class ProblemDisplay extends React.Component {
 
   render () {
     return (
-      <Grid className='problem'><Row>
-        <Col className='operand' xs={1} xsOffset={6}>{this.props.problem.operands[0]}</Col>
-      </Row><Row>
-        <Col className='operator' xsOffset={5} xs={1}>{this.props.problem.operator}</Col>
-        <Col className='operand' xs={1}>{this.props.problem.operands[1]}</Col>
-      </Row><Row>
-        <Col className='answer-line' xsOffset={5} xs={3}>
-        </Col>
-      </Row><Row>
-        <Col className='answer' xsOffset={6} xs={1}>
-          {this.props.problem.answer}
-        </Col>
-      </Row></Grid>
+      <div className='problem'>
+        <div className='operators'>
+          <div className='operator'>{this.props.problem.operator}</div>
+        </div>
+        <div className='numbers'>
+          <span className='operand'>{this.props.problem.operands[0]}</span>
+          <span className='operand'>{this.props.problem.operands[1]}</span>
+          <span className='answer-line'></span>
+          <span className='answer'>{this.props.problem.answer}</span>
+        </div>
+      </div>
     )
   }
 }

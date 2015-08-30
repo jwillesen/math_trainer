@@ -13,6 +13,8 @@
     "comma-dangle": [2, "always-multiline"],
     "no-var": [2],
 
+    "no-warning-comments": 1,
+
     "no-alert": [1],
     "no-console": [1],
     "no-debugger": [1]

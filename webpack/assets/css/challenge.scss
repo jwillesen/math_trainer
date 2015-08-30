@@ -1,10 +1,28 @@
 .problem {
-  .operand, .operator, .answer {
-    line-height: 1;
-    font-size: 100px;
-  }
+  display: flex;
+  justify-content: center;
+}
 
-  .answer-line {
-    border-top: solid;
-  }
+.operators {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.numbers {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  width: 100px;
+}
+
+.answer-line {
+  background-color: black;
+  height: 3px;
+  width: 170px;
+}
+
+.operand, .operator, .answer {
+  line-height: 1;
+  font-size: 100px;
 }
