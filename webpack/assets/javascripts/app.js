@@ -21,6 +21,7 @@ export class App extends React.Component {
         challenge={this.props.state.challenge}
         toggleShowAnswer={this.props.toggleShowAnswer}
         newProblem={this.props.newProblem}
+        updateDuration={this.props.updateDuration}
         quitChallenge={this.props.quitChallenge}
       />
     } else {

@@ -19,6 +19,10 @@ function newOperands (state, action) {
   return newState
 }
 
+function resetTimer (state, action) {
+  return {start: Date.now()}
+}
+
 const configurationReducers = {
   operands: handleActions({
     [actions.CHANGE_OPERAND]: newOperands,
@@ -33,10 +37,15 @@ const challengeReducers = {
   problem: handleActions({
     [actions.NEW_PROBLEM]: fsaIdentity,
   }, defaultProblem),
+
   showAnswer: handleActions({
     [actions.TOGGLE_SHOW_ANSWER]: state => !state,
     [actions.NEW_PROBLEM]: () => false,
   }, false),
+
+  time: handleActions({
+    [actions.START_CHALLENGE]: resetTimer,
+  }, resetTimer()),
 }
 
 const reducers = {
