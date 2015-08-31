@@ -6,3 +6,14 @@ $selected-button-color: #5cb85c;
     background-color: $selected-button-color;
   }
 }
+
+.configuration .select-operator {
+  display: flex;
+  align-items: stretch;
+}
+
+.configuration .alert {
+  padding: 9px;
+  margin: 0;
+  margin-left: 5px;
+}

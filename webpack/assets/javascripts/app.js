@@ -13,7 +13,7 @@ export class App extends React.Component {
       screen = <Configuration
         configuration={this.props.state.configuration}
         changeOperand={this.props.changeOperand}
-        changeOperator={this.props.changeOperator}
+        toggleOperator={this.props.toggleOperator}
         startChallenge={this.props.startChallenge}
       />
     } else if (mode === MODES.challenge) {

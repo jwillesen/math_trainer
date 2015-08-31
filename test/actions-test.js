@@ -18,7 +18,7 @@ describe('generateRandomProblem', () => {
   it('generates operands in the desired range', () => {
     const spyRng = {integer () {}}
     const spy = expect.spyOn(spyRng, 'integer').andReturn(1)
-    const result = generateRandomProblem({operands: [3, 4], operator: OPERATORS.plus}, {}, spyRng)
+    const result = generateRandomProblem({operands: [3, 4], operators: {[OPERATORS.plus]: true}}, {}, spyRng)
     expect(spy.calls.length).toBe(2)
     expect(spy.calls[0].arguments).toEqual([{min: 1, max: 3}])
     expect(spy.calls[1].arguments).toEqual([{min: 1, max: 4}])
@@ -26,36 +26,36 @@ describe('generateRandomProblem', () => {
   })
 
   it('copies the operator', () => {
-    const result = generateRandomProblem({operands: [3, 4], operator: OPERATORS.plus}, {})
+    const result = generateRandomProblem({operands: [3, 4], operators: {[OPERATORS.plus]: true}}, {})
     expect(result.operator).toBe(OPERATORS.plus)
   })
 
   it('generates the answer to a plus operator', () => {
-    const result = generateRandomProblem({operands: [5, 5], operator: OPERATORS.plus}, {}, fakeRng(1, 2))
+    const result = generateRandomProblem({operands: [5, 5], operators: {[OPERATORS.plus]: true}}, {}, fakeRng(1, 2))
     expect(result.answer).toBe(3)
   })
 
   it('generates the answer to a minus operator', () => {
-    const result = generateRandomProblem({operands: [5, 5], operator: OPERATORS.minus}, {}, fakeRng(2, 1))
+    const result = generateRandomProblem({operands: [5, 5], operators: {[OPERATORS.minus]: true}}, {}, fakeRng(2, 1))
     expect(result.answer).toBe(1)
     expect(result.operator).toBe(OPERATORS.minus)
   })
 
   it('reverses operands if answer would be negative', () => {
-    const result = generateRandomProblem({operands: [5, 5], operator: OPERATORS.minus}, {}, fakeRng(2, 3))
+    const result = generateRandomProblem({operands: [5, 5], operators: {[OPERATORS.minus]: true}}, {}, fakeRng(2, 3))
     expect(result.operands).toEqual([3, 2])
     expect(result.answer).toBe(1)
   })
 
   it('generates the answer to a times operator', () => {
-    const result = generateRandomProblem({operands: [5, 5], operator: OPERATORS.times}, {}, fakeRng(3, 4))
+    const result = generateRandomProblem({operands: [5, 5], operators: {[OPERATORS.times]: true}}, {}, fakeRng(3, 4))
     expect(result.answer).toBe(12)
     expect(result.operator).toBe(OPERATORS.times)
   })
 
   it('avoids generating the same problem twice', () => {
     const result = generateRandomProblem(
-      {operands: [5, 5], operator: OPERATORS.plus},
+      {operands: [5, 5], operators: {[OPERATORS.plus]: true}},
       {operands: [1, 2], operator: OPERATORS.plus, answer: 3},
       fakeRng(1, 2, 1, 2, 1, 2, 3, 4)
     )
@@ -65,7 +65,7 @@ describe('generateRandomProblem', () => {
 
   it('does not have an infinte loop avoiding duplicate problems', () => {
     const result = generateRandomProblem(
-      {operands: [5, 5], operator: OPERATORS.plus},
+      {operands: [5, 5], operators: {[OPERATORS.plus]: true}},
       {operands: [1, 2], operator: OPERATORS.plus, answer: 3},
       fakeRng(
         1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2,
@@ -76,5 +76,22 @@ describe('generateRandomProblem', () => {
     )
     expect(result.operands).toEqual([1, 2])
     expect(result.answer).toEqual(3)
+  })
+
+  it('selects from a set of operators', () => {
+    const result = generateRandomProblem({
+      operands: [5, 5],
+      operators: {[OPERATORS.plus]: false, [OPERATORS.minus]: true, [OPERATORS.times]: true},
+    }, {}, fakeRng(1, 2, 2))
+    // can't predict order of object keys, either is valid
+    expect([OPERATORS.minus, OPERATORS.times]).toInclude(result.operator)
+  })
+
+  it('uses plus if no operators are selected', () => {
+    const result = generateRandomProblem({
+      operands: [5, 5],
+      operators: {[OPERATORS.plus]: false, [OPERATORS.minus]: false, [OPERATORS.times]: false},
+    }, {}, fakeRng(1, 2))
+    expect(result.operator).toBe(OPERATORS.plus)
   })
 })

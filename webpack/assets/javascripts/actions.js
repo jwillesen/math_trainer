@@ -5,13 +5,30 @@ import {OPERATORS} from './constants'
 
 const stdrng = new Chance()
 
+function selectRandomOperator (operators, rng) {
+  const enabledOperators = Object.keys(operators).reduce((memo, operator) => {
+    if (operators[operator]) memo.push(operator)
+    return memo
+  }, [])
+  if (enabledOperators.length === 0) return OPERATORS.plus
+
+  // short-circuit length 1 so unit tests don't have to fake these random numbers
+  if (enabledOperators.length === 1) return enabledOperators[0]
+
+  const selectedIndex = rng.integer({min: 0, max: enabledOperators.length - 1})
+  return enabledOperators[selectedIndex]
+}
+
 export function generateRandomProblem (configuration, priorProblem, rng = stdrng) {
   const problemGenerators = {
     [OPERATORS.plus]: generateAdditionProblem,
     [OPERATORS.minus]: generateSubtractionProblem,
     [OPERATORS.times]: generateMultiplicationProblem,
   }
-  const problemGenerator = problemGenerators[configuration.operator]
+
+  const selectedOperator = selectRandomOperator(configuration.operators, rng)
+  const problemGenerator = problemGenerators[selectedOperator]
+
   let newProblem = problemGenerator(configuration, rng)
   // avoid displaying the same problem twice
   for (let i = 0; i < 5 && deepEqual(newProblem, priorProblem); ++i) {
@@ -35,7 +52,7 @@ function makeProblemState (operands, operator, answer) {
 export function generateAdditionProblem (configuration, rng) {
   const operands = generateOperands(configuration, rng)
   return makeProblemState(
-    operands, configuration.operator,
+    operands, OPERATORS.plus,
     operands.reduce((memo, next) => memo + next)
   )
 }
@@ -44,7 +61,7 @@ export function generateSubtractionProblem (configuration, rng) {
   const operands = generateOperands(configuration, rng)
   if (operands[0] < operands[1]) operands.reverse()
   return makeProblemState(
-    operands, configuration.operator,
+    operands, OPERATORS.minus,
     operands.reduce((memo, next) => memo - next)
   )
 }
@@ -52,7 +69,7 @@ export function generateSubtractionProblem (configuration, rng) {
 export function generateMultiplicationProblem (configuration, rng) {
   const operands = generateOperands(configuration, rng)
   return makeProblemState(
-    operands, configuration.operator,
+    operands, OPERATORS.times,
     operands.reduce((memo, next) => memo * next)
   )
 }
@@ -82,8 +99,8 @@ export const CHANGE_OPERAND = 'CHANGE_OPERAND'
 export const changeOperand = createAction(CHANGE_OPERAND,
   (operandIndex, operandValue) => ({operandIndex, operandValue}))
 
-export const CHANGE_OPERATOR = 'CHANGE_OPERATOR'
-export const changeOperator = createAction(CHANGE_OPERATOR)
+export const TOGGLE_OPERATOR = 'TOGGLE_OPERATOR'
+export const toggleOperator = createAction(TOGGLE_OPERATOR)
 
 export const TOGGLE_SHOW_ANSWER = 'TOGGLE_SHOW_ANSWER'
 export const toggleShowAnswer = createAction(TOGGLE_SHOW_ANSWER)

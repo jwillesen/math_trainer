@@ -12,7 +12,7 @@ export default class Configuration extends React.Component
       configuration: PropTypes.object.isRequired,
       startChallenge: PropTypes.func.isRequired,
       changeOperand: PropTypes.func.isRequired,
-      changeOperator: PropTypes.func.isRequired,
+      toggleOperator: PropTypes.func.isRequired,
     }
   }
 
@@ -23,22 +23,22 @@ export default class Configuration extends React.Component
 
         <Input label='Select Operation'><div>
           <OperatorSelector
-            operatorValue={this.props.configuration.operator}
-            operatorChange={this.props.changeOperator}
+            operators={this.props.configuration.operators}
+            toggleOperator={this.props.toggleOperator}
           />
         </div></Input>
 
         <Input label='First Operand Limit'><div>
           <OperandSelector
-            operandValue={this.props.configuration.operands[0]}
-            operandChange={this.props.changeOperand.bind(null, 0)}
+            operand={this.props.configuration.operands[0]}
+            changeOperand={this.props.changeOperand.bind(null, 0)}
           />
         </div></Input>
 
         <Input label='Second Operand Limit'><div>
           <OperandSelector
-            operandValue={this.props.configuration.operands[1]}
-            operandChange={this.props.changeOperand.bind(null, 1)}
+            operand={this.props.configuration.operands[1]}
+            changeOperand={this.props.changeOperand.bind(null, 1)}
           />
         </div></Input>
 

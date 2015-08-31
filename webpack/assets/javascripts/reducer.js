@@ -4,6 +4,13 @@ import * as actions from './actions'
 import {MODES, OPERATORS} from './constants'
 
 const defaultOperands = [5, 5]
+
+const defaultOperators = {
+  [OPERATORS.plus]: true,
+  [OPERATORS.minus]: false,
+  [OPERATORS.times]: false,
+}
+
 const defaultProblem = {
   operands: [1, 1],
   operator: OPERATORS.plus,
@@ -23,17 +30,24 @@ function resetTimer (state, action) {
   return {start: Date.now()}
 }
 
-const configurationReducers = {
+function toggleOperator (state, action) {
+  const oldValue = state[action.payload]
+  if (oldValue === undefined) return state
+  const newState = {...state, [action.payload]: !oldValue}
+  return newState
+}
+
+export const configurationReducers = {
   operands: handleActions({
     [actions.CHANGE_OPERAND]: newOperands,
   }, defaultOperands),
 
-  operator: handleActions({
-    [actions.CHANGE_OPERATOR]: fsaIdentity,
-  }, '+'),
+  operators: handleActions({
+    [actions.TOGGLE_OPERATOR]: toggleOperator,
+  }, defaultOperators),
 }
 
-const challengeReducers = {
+export const challengeReducers = {
   problem: handleActions({
     [actions.NEW_PROBLEM]: fsaIdentity,
   }, defaultProblem),
@@ -48,7 +62,7 @@ const challengeReducers = {
   }, resetTimer()),
 }
 
-const reducers = {
+export const reducers = {
   configuration: combineReducers(configurationReducers),
 
   challenge: combineReducers(challengeReducers),
