@@ -27,6 +27,10 @@ export default class Challenge extends React.Component
     this.interval = setInterval(() => this.updateDuration(), this.props.timerIntervalMs)
   }
 
+  componentDidMount () {
+    React.findDOMNode(this.refs.continueButton).focus()
+  }
+
   componentWillUnmount () {
     clearInterval(this.interval)
   }
@@ -53,7 +57,7 @@ export default class Challenge extends React.Component
         <h1>Game On!<span className='pull-right'>{this.durationString()}</span></h1>
         <ButtonToolbar>
           <Button bsStyle='primary' onClick={this.props.quitChallenge}>Quit</Button>
-          <Button onClick={continueProps.action}>{continueProps.text}</Button>
+          <Button ref='continueButton' onClick={continueProps.action}>{continueProps.text}</Button>
         </ButtonToolbar>
         <ProblemDisplay
           problem={this.props.challenge.problem}
