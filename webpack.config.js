@@ -4,8 +4,8 @@ module.exports = {
   // context: __dirname,
   entry: './webpack/assets/javascripts/index.js',
   output: {
-    filename: 'bundle.js',
-    path: 'public/assets/javascripts',
+    path: path.join(__dirname, 'public'),
+    filename: 'assets/javascripts/bundle.js',
   },
   resolve: {
     root: [
@@ -36,10 +36,10 @@ module.exports = {
       {test: /\.css$/, loader: 'style-loader!css-loader'},
 
       // needed to load bootstrap's css
-      {test: /\.woff2?$/, loader: 'file', query: {name: '../../assets/fonts/[hash].[ext]'}},
-      {test: /\.ttf$/, loader: 'file', query: {name: '../../assets/fonts/[hash].[ext]'}},
-      {test: /\.eot$/, loader: 'file', query: {name: '../../assets/fonts/[hash].[ext]'}},
-      {test: /\.svg$/, loader: 'file', query: {name: '../../assets/fonts/[hash].[ext]'}},
+      {test: /\.woff2?$/, loader: 'file', query: {name: 'assets/fonts/[hash].[ext]'}},
+      {test: /\.ttf$/, loader: 'file', query: {name: 'assets/fonts/[hash].[ext]'}},
+      {test: /\.eot$/, loader: 'file', query: {name: 'assets/fonts/[hash].[ext]'}},
+      {test: /\.svg$/, loader: 'file', query: {name: 'assets/fonts/[hash].[ext]'}},
     ],
   },
 }
