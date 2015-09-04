@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/jwillesen/math_trainer",
   "devDependencies": {
+    "autoprefixer": "^6.0.0",
     "babel": "^5.8.21",
     "babel-core": "^5.8.22",
     "babel-eslint": "^4.0.10",
@@ -55,6 +56,8 @@
     "mocha-loader": "^0.7.1",
     "node-libs-browser": "^0.5.2",
     "node-sass": "^3.2.0",
+    "postcss": "^5.0.4",
+    "postcss-loader": "^0.6.0",
     "react": "^0.13.3",
     "react-bootstrap": "^0.24.5",
     "react-redux": "^0.9.0",
