@@ -36,9 +36,9 @@ export default class Challenge extends React.Component
   }
 
   continueButtonProps () {
-    return this.props.challenge.showAnswer ?
-      {text: 'Next Problem', action: this.props.newProblem} :
-      {text: 'Show Answer', action: this.props.toggleShowAnswer}
+    return this.props.challenge.showAnswer
+      ? {text: 'Next Problem', action: this.props.newProblem}
+      : {text: 'Show Answer', action: this.props.toggleShowAnswer}
   }
 
   updateDuration () {
