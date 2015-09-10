@@ -30,6 +30,7 @@ export default class Configuration extends React.Component
 
         <Input label='First Operand Limit'><div>
           <OperandSelector
+            maxOperand={20}
             operand={this.props.configuration.operands[0]}
             changeOperand={this.props.changeOperand.bind(null, 0)}
           />
@@ -37,6 +38,7 @@ export default class Configuration extends React.Component
 
         <Input label='Second Operand Limit'><div>
           <OperandSelector
+            maxOperand={20}
             operand={this.props.configuration.operands[1]}
             changeOperand={this.props.changeOperand.bind(null, 1)}
           />
