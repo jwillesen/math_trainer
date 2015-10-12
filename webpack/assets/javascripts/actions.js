@@ -79,21 +79,22 @@ export function newProblem () {
   return (dispatch, getState) => {
     const state = getState()
     dispatch(createAction(NEW_PROBLEM)(
-      generateRandomProblem(state.configuration, state.challenge.problem))
+      generateRandomProblem(state.configuration, state.game.problem))
     )
   }
 }
 
-export const START_CHALLENGE = 'START_CHALLENGE'
-export function startChallenge () {
+export const START_GAME = 'START_GAME'
+export function startGame () {
   return (dispatch, getState) => {
+    const gameMode = getState().configuration.gameMode
     dispatch(newProblem())
-    dispatch(createAction(START_CHALLENGE)())
+    dispatch(createAction(START_GAME)(gameMode))
   }
 }
 
-export const QUIT_CHALLENGE = 'QUIT_CHALLENGE'
-export const quitChallenge = createAction(QUIT_CHALLENGE)
+export const QUIT_GAME = 'QUIT_GAME'
+export const quitGame = createAction(QUIT_GAME)
 
 export const CHANGE_OPERAND = 'CHANGE_OPERAND'
 export const changeOperand = createAction(CHANGE_OPERAND,
@@ -104,3 +105,6 @@ export const toggleOperator = createAction(TOGGLE_OPERATOR)
 
 export const TOGGLE_SHOW_ANSWER = 'TOGGLE_SHOW_ANSWER'
 export const toggleShowAnswer = createAction(TOGGLE_SHOW_ANSWER)
+
+export const CHANGE_GAME_MODE = 'CHANGE_GAME_MODE'
+export const changeGameMode = createAction(CHANGE_GAME_MODE)

@@ -1,8 +1,13 @@
 /* eslint-env mocha */
 
 import expect from 'expect'
-import {OPERATORS} from 'constants'
-import {generateRandomProblem} from 'actions'
+import {MODES, OPERATORS} from 'constants'
+import * as actions from 'actions'
+import reducer from 'reducer'
+const startGame = actions.startGame
+const generateRandomProblem = actions.generateRandomProblem
+
+const defaultState = reducer(undefined, {type: 'blah'})
 
 function fakeRng (...numbers) {
   const numberGenerator = function * () {
@@ -13,6 +18,21 @@ function fakeRng (...numbers) {
   const gen = numberGenerator()
   return {integer: () => gen.next().value}
 }
+
+describe('startGame', () => {
+  it('creates a new problem and sets mode to configured game mode', () => {
+    const dispatch = expect.createSpy()
+    const getState = () => defaultState
+    startGame()(dispatch, getState)
+    expect(dispatch.calls.length).toBe(2)
+    const actionFunction = dispatch.calls[0].arguments[0]
+    actionFunction(dispatch, getState)
+    expect(dispatch.calls.length).toBe(3)
+    expect(typeof actionFunction).toBe('function')
+    expect(dispatch.calls[1].arguments[0]).toEqual({type: actions.START_GAME, payload: MODES.flashcard})
+    expect(dispatch.calls[2].arguments[0].type).toBe(actions.NEW_PROBLEM)
+  })
+})
 
 describe('generateRandomProblem', () => {
   it('generates operands in the desired range', () => {

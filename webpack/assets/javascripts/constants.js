@@ -1,5 +1,6 @@
 export const MODES = {
   configure: 'configure',
+  flashcard: 'flashcard',
   challenge: 'challenge',
 }
 

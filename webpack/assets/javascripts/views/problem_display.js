@@ -2,6 +2,8 @@ import React, {PropTypes} from 'react'
 import classNames from 'classnames'
 import {OPERATORS} from '../constants'
 
+require('problem.scss')
+
 export default class ProblemDisplay extends React.Component {
   static get propTypes () {
     return {

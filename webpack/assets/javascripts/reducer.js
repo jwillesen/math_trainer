@@ -11,6 +11,8 @@ const defaultOperators = {
   [OPERATORS.times]: false,
 }
 
+const defaultGameMode = MODES.flashcard
+
 const defaultProblem = {
   operands: [1, 1],
   operator: OPERATORS.plus,
@@ -38,6 +40,10 @@ function toggleOperator (state, action) {
 }
 
 export const configurationReducers = {
+  gameMode: handleActions({
+    [actions.CHANGE_GAME_MODE]: fsaIdentity,
+  }, defaultGameMode),
+
   operands: handleActions({
     [actions.CHANGE_OPERAND]: newOperands,
   }, defaultOperands),
@@ -47,7 +53,7 @@ export const configurationReducers = {
   }, defaultOperators),
 }
 
-export const challengeReducers = {
+export const gameReducers = {
   problem: handleActions({
     [actions.NEW_PROBLEM]: fsaIdentity,
   }, defaultProblem),
@@ -58,18 +64,18 @@ export const challengeReducers = {
   }, false),
 
   time: handleActions({
-    [actions.START_CHALLENGE]: resetTimer,
+    [actions.START_GAME]: resetTimer,
   }, resetTimer()),
 }
 
 export const reducers = {
   configuration: combineReducers(configurationReducers),
 
-  challenge: combineReducers(challengeReducers),
+  game: combineReducers(gameReducers),
 
   mode: handleActions({
-    [actions.START_CHALLENGE]: () => MODES.challenge,
-    [actions.QUIT_CHALLENGE]: () => MODES.configure,
+    [actions.START_GAME]: fsaIdentity,
+    [actions.QUIT_GAME]: () => MODES.configure,
   }, MODES.configure),
 }
 

@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import * as actions from './actions'
 import {MODES} from './constants'
 import Configuration from 'views/configuration'
+import Flashcard from 'views/flashcard'
 import Challenge from 'views/challenge'
 
 export class App extends React.Component {
@@ -14,15 +15,22 @@ export class App extends React.Component {
         configuration={this.props.state.configuration}
         changeOperand={this.props.changeOperand}
         toggleOperator={this.props.toggleOperator}
-        startChallenge={this.props.startChallenge}
+        startGame={this.props.startGame}
+        changeGameMode={this.props.changeGameMode}
       />
-    } else if (mode === MODES.challenge) {
-      screen = <Challenge
-        challenge={this.props.state.challenge}
+    } else if (mode === MODES.flashcard) {
+      screen = <Flashcard
+        game={this.props.state.game}
         toggleShowAnswer={this.props.toggleShowAnswer}
         newProblem={this.props.newProblem}
         updateDuration={this.props.updateDuration}
-        quitChallenge={this.props.quitChallenge}
+        quitGame={this.props.quitGame}
+      />
+    } else if (mode === MODES.challenge) {
+      screen = <Challenge
+        game={this.props.state.game}
+        quitGame={this.props.quitGame}
+        newProblem={this.props.newProblem}
       />
     } else {
       screen = <h1>Error, Unknown Mode</h1>
