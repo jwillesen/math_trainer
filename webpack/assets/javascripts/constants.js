@@ -5,7 +5,8 @@ export const MODES = {
 }
 
 export const OPERATORS = {
-  plus: '+',
-  minus: '-',
-  times: 'x',
+  plus: '+', // plus sign
+  minus: '−', // minus sign
+  times: 'x', // multiplication sign
+  divide: '÷', // division sign
 }

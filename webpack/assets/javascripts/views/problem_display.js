@@ -23,6 +23,7 @@ export default class ProblemDisplay extends React.Component {
       case OPERATORS.plus: return '\u002B' // plus sign
       case OPERATORS.minus: return '\u2212' // minus sign
       case OPERATORS.times: return '\u00D7' // multiplication sign
+      case OPERATORS.divide: return '\u00F7' // division sign
       default: return '?'
     }
   }

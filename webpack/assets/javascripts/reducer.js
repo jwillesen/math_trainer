@@ -9,6 +9,7 @@ const defaultOperators = {
   [OPERATORS.plus]: true,
   [OPERATORS.minus]: false,
   [OPERATORS.times]: false,
+  [OPERATORS.divide]: false,
 }
 
 const defaultGameMode = MODES.flashcard

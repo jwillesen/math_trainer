@@ -20,13 +20,13 @@ export default class OperandSelector extends React.Component {
     else return {active: false, 'aria-pressed': 'false'}
   }
 
-  renderButton (glyph, operator) {
+  renderButton (operator) {
     return (
-      <Button
+      <Button className="operator-button"
         onClick={this.props.toggleOperator.bind(null, operator)}
         {...this.operatorButtonProps(operator)}
       >
-        <Glyphicon glyph={glyph} />
+        {operator}
       </Button>
     )
   }
@@ -44,9 +44,10 @@ export default class OperandSelector extends React.Component {
     return (
       <div className='select-operator'>
         <ButtonGroup bsSize='large'>
-          {this.renderButton('plus', OPERATORS.plus)}
-          {this.renderButton('minus', OPERATORS.minus)}
-          {this.renderButton('remove', OPERATORS.times)}
+          {this.renderButton(OPERATORS.plus)}
+          {this.renderButton(OPERATORS.minus)}
+          {this.renderButton(OPERATORS.times)}
+          {this.renderButton(OPERATORS.divide)}
         </ButtonGroup>
         {this.renderWarning()}
       </div>

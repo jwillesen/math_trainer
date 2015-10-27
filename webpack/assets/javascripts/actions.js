@@ -24,6 +24,7 @@ export function generateRandomProblem (configuration, priorProblem, rng = stdrng
     [OPERATORS.plus]: generateAdditionProblem,
     [OPERATORS.minus]: generateSubtractionProblem,
     [OPERATORS.times]: generateMultiplicationProblem,
+    [OPERATORS.divide]: generateDivisionProblem,
   }
 
   const selectedOperator = selectRandomOperator(configuration.operators, rng)
@@ -72,6 +73,13 @@ export function generateMultiplicationProblem (configuration, rng) {
     operands, OPERATORS.times,
     operands.reduce((memo, next) => memo * next)
   )
+}
+
+export function generateDivisionProblem (configuration, rng) {
+  const operands = generateOperands(configuration, rng)
+  const answer = operands[0]
+  operands[0] = operands[1] * answer
+  return makeProblemState(operands, OPERATORS.divide, answer)
 }
 
 export const NEW_PROBLEM = 'NEW_PROBLEM'

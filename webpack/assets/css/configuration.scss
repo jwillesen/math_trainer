@@ -7,6 +7,10 @@ $selected-button-color: #5cb85c;
   }
 }
 
+.configuration .operator-button {
+  font-weight: bold;
+}
+
 .configuration .select-operator {
   display: flex;
   align-items: stretch;
