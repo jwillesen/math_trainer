@@ -2,6 +2,7 @@ require('bootstrap/dist/css/bootstrap.css')
 require('imports?jQuery=jquery!bootstrap/dist/js/bootstrap.js')
 
 import React from 'react'
+import ReactDOM from 'react-dom'
 
 import {applyMiddleware, createStore} from 'redux'
 import {Provider} from 'react-redux'
@@ -22,9 +23,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const createStoreWithMiddleware = applyMiddleware.apply(this, middleware)(createStore)
   const store = createStoreWithMiddleware(reducer)
 
-  React.render(
+  ReactDOM.render(
     <Provider store={store}>
-      {() => <App />}
+      <App />
     </Provider>,
-    document.body)
+    document.getElementById('app'))
 })

@@ -1,4 +1,5 @@
 import React, {PropTypes} from 'react'
+import ReactDOM from 'react-dom'
 import {Button, ButtonToolbar} from 'react-bootstrap'
 import ProblemDisplay from './problem_display'
 
@@ -26,7 +27,7 @@ export default class Flashcard extends React.Component
   }
 
   componentDidMount () {
-    React.findDOMNode(this.refs.continueButton).focus()
+    ReactDOM.findDOMNode(this.refs.continueButton).focus()
   }
 
   componentWillUnmount () {
