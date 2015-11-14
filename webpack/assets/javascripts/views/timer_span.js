@@ -3,14 +3,13 @@ import React, {PropTypes} from 'react'
 export default class TimerSpan extends React.Component {
   static get propTypes () {
     return {
-      start: PropTypes.number,
+      start: PropTypes.number.isRequired,
       timerIntervalMs: PropTypes.number,
     }
   }
 
   static get defaultProps () {
     return {
-      start: Date.now(),
       timerIntervalMs: 500,
     }
   }

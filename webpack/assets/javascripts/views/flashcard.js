@@ -28,7 +28,7 @@ export default class Flashcard extends React.Component {
     const continueProps = this.continueButtonProps()
     return (
       <div>
-        <h1>Flash Cards<TimerSpan className='pull-right' /></h1>
+        <h1>Flash Cards<TimerSpan className='pull-right' start={this.props.game.time.start} /></h1>
         <ButtonToolbar>
           <Button bsStyle='primary' onClick={this.props.quitGame}>Quit</Button>
           <Button ref='continueButton' onClick={continueProps.action}>{continueProps.text}</Button>
