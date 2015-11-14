@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react'
 import {Button, ButtonToolbar} from 'react-bootstrap'
+import ProblemDisplay from './problem_display'
 import TimerSpan from './timer_span'
 
 export default class Challenge extends React.Component {
@@ -25,7 +26,13 @@ export default class Challenge extends React.Component {
         <ButtonToolbar>
           <Button bsStyle='primary' onClick={this.props.quitGame}>Quit</Button>
         </ButtonToolbar>
-        <p>Sorry, this mode hasn't been implemented yet</p>
+        <ProblemDisplay
+          topOperand='6'
+          bottomOperand='7'
+          operator={require('../constants').OPERATORS.times}
+          answer='42'
+          showAnswer={true}
+        />
       </div>
     )
   }

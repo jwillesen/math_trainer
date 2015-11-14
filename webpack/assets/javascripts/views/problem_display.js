@@ -8,10 +8,10 @@ export default class ProblemDisplay extends React.Component {
   static get propTypes () {
     return {
       showAnswer: PropTypes.bool,
-      topOperand: PropTypes.number.isRequired,
-      bottomOperand: PropTypes.number.isRequired,
+      topOperand: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+      bottomOperand: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
       operator: PropTypes.string.isRequired,
-      answer: PropTypes.number,
+      answer: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
     }
   }
 
