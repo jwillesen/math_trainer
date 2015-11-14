@@ -34,7 +34,10 @@ export default class Flashcard extends React.Component {
           <Button ref='continueButton' onClick={continueProps.action}>{continueProps.text}</Button>
         </ButtonToolbar>
         <ProblemDisplay
-          problem={this.props.game.problem}
+          topOperand={this.props.game.problem.operands[0]}
+          bottomOperand={this.props.game.problem.operands[1]}
+          operator={this.props.game.problem.operator}
+          answer={this.props.game.problem.answer}
           showAnswer={this.props.game.showAnswer}
         />
       </div>

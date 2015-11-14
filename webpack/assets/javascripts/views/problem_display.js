@@ -8,7 +8,10 @@ export default class ProblemDisplay extends React.Component {
   static get propTypes () {
     return {
       showAnswer: PropTypes.bool,
-      problem: PropTypes.object.isRequired,
+      topOperand: PropTypes.number.isRequired,
+      bottomOperand: PropTypes.number.isRequired,
+      operator: PropTypes.string.isRequired,
+      answer: PropTypes.number,
     }
   }
 
@@ -19,7 +22,7 @@ export default class ProblemDisplay extends React.Component {
   }
 
   operatorText () {
-    switch (this.props.problem.operator) {
+    switch (this.props.operator) {
       case OPERATORS.plus: return '\u002B' // plus sign
       case OPERATORS.minus: return '\u2212' // minus sign
       case OPERATORS.times: return '\u00D7' // multiplication sign
@@ -35,11 +38,11 @@ export default class ProblemDisplay extends React.Component {
           <div className='operator'>{this.operatorText()}</div>
         </div>
         <div className='numbers'>
-          <span className='operand'>{this.props.problem.operands[0]}</span>
-          <span className='operand'>{this.props.problem.operands[1]}</span>
+          <span className='operand'>{this.props.topOperand}</span>
+          <span className='operand'>{this.props.bottomOperand}</span>
           <span className='answer-line'></span>
           <span className={classNames('answer', {visible: this.props.showAnswer})}>
-            {this.props.problem.answer}
+            {this.props.answer}
           </span>
         </div>
       </div>
