@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react'
 import {Button, ButtonToolbar} from 'react-bootstrap'
+import TimerSpan from './timer_span'
 
 export default class Challenge extends React.Component {
   static get propTypes () {
@@ -20,7 +21,7 @@ export default class Challenge extends React.Component {
   render () {
     return (
       <div>
-        <h1>Challenge Mode!</h1>
+        <h1>Challenge Mode!<TimerSpan className='pull-right' /></h1>
         <ButtonToolbar>
           <Button bsStyle='primary' onClick={this.props.quitGame}>Quit</Button>
         </ButtonToolbar>
