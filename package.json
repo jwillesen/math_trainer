@@ -11,7 +11,7 @@
     "test:watch": "karma start --single-run=false",
     "lint": "eslint --ext .js,.jsx webpack",
     "pack": "webpack --progress --colors -d",
-    "watch": "webpack --watch -d",
+    "pack:watch": "webpack --watch -d",
     "prod": "webpack --progress --colors -p"
   },
   "repository": {

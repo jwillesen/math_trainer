@@ -7,17 +7,17 @@ require('problem.scss')
 export default class ProblemDisplay extends React.Component {
   static get propTypes () {
     return {
-      showAnswer: PropTypes.bool,
       topOperand: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
       bottomOperand: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
       operator: PropTypes.string.isRequired,
       answer: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+      answerClassNames: PropTypes.oneOfType([PropTypes.string, PropTypes.array, PropTypes.object]),
     }
   }
 
   static get defaultProps () {
     return {
-      showAnswer: false,
+      answerClassNames: '',
     }
   }
 
@@ -32,6 +32,9 @@ export default class ProblemDisplay extends React.Component {
   }
 
   render () {
+    // answer must have some content for css to line up properly
+    let answer = this.props.answer
+    if (answer === '') answer = '\u00A0' // &nbsp;
     return (
       <div className='problem'>
         <div className='operators'>
@@ -41,8 +44,8 @@ export default class ProblemDisplay extends React.Component {
           <span className='operand'>{this.props.topOperand}</span>
           <span className='operand'>{this.props.bottomOperand}</span>
           <span className='answer-line'></span>
-          <span className={classNames('answer', {visible: this.props.showAnswer})}>
-            {this.props.answer}
+          <span className={classNames('answer', this.props.answerClassNames)}>
+            {answer}
           </span>
         </div>
       </div>

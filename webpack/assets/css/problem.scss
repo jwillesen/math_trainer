@@ -35,3 +35,11 @@
 .answer.visible {
   opacity: 1;
 }
+
+.answer.correct {
+  color: green;
+}
+
+.answer.incorrect {
+  color: red;
+}

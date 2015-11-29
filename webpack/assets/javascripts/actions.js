@@ -157,12 +157,11 @@ const handleKey = (key, dispatch, getState) => {
 }
 
 export const PROBLEM_KEY_PRESS = 'PROBLEM_KEY_PRESS'
-export const problemKeyPress = (keyPressEvent) => {
+export const challengeKeyPress = (keyname) => {
   return (dispatch, getState) => {
     const state = getState()
     if (state.configuration.gameMode === MODES.challenge) {
-      if (handleKey(keyPressEvent.key, dispatch, getState)) {
-        keyPressEvent.preventDefault()
+      if (handleKey(keyname, dispatch, getState)) {
       }
     }
   }

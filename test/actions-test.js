@@ -122,57 +122,45 @@ const getProblemState = (currentGuess = '') => {
   return result
 }
 
-const mockKeyPressEvent = (key) => ({key, preventDefault: expect.createSpy()})
-
-describe('problemKeyPress', () => {
+describe('challengeKeyPress', () => {
   it('appends digits', () => {
-    const keyPress = mockKeyPressEvent('2')
     const harness = new Harness(getProblemState('1'))
-    harness.dispatch(actions.problemKeyPress(keyPress))
+    harness.dispatch(actions.challengeKeyPress('2'))
     expect(harness.spy).toHaveBeenCalledWith({type: actions.SET_GUESS, payload: '12'})
     expect(harness.spy.calls.length).toBe(1)
-    expect(keyPress.preventDefault).toHaveBeenCalled()
   })
 
   it('ignores digits when mode is not challenge', () => {
     const state = getProblemState()
     state.configuration.gameMode = MODES.flashcard
-    const keyPress = mockKeyPressEvent('1')
     const harness = new Harness(state)
-    harness.dispatch(actions.problemKeyPress(keyPress))
+    harness.dispatch(actions.challengeKeyPress('1'))
     expect(harness.spy).toNotHaveBeenCalled()
-    expect(keyPress.preventDefault).toNotHaveBeenCalled()
   })
 
   it('ignores non-digits', () => {
-    const keyPress = mockKeyPressEvent('Tab')
     const harness = new Harness(getProblemState())
-    harness.dispatch(actions.problemKeyPress(keyPress))
+    harness.dispatch(actions.challengeKeyPress('Tab'))
     expect(harness.spy).toNotHaveBeenCalled()
-    expect(keyPress.preventDefault).toNotHaveBeenCalled()
   })
 
   it('clears on escape', () => {
-    const keyPress = mockKeyPressEvent('Escape')
     const harness = new Harness(getProblemState('1234'))
-    harness.dispatch(actions.problemKeyPress(keyPress))
+    harness.dispatch(actions.challengeKeyPress('Escape'))
     expect(harness.spy).toHaveBeenCalledWith({type: actions.SET_GUESS, payload: ''})
     expect(harness.spy.calls.length).toBe(1)
-    expect(keyPress.preventDefault).toHaveBeenCalled()
   })
 
   it('removes last digit on backspace', () => {
-    const keyPress = mockKeyPressEvent('Backspace')
     const harness = new Harness(getProblemState('1234'))
-    harness.dispatch(actions.problemKeyPress(keyPress))
+    harness.dispatch(actions.challengeKeyPress('Backspace'))
     expect(harness.spy).toHaveBeenCalledWith({type: actions.SET_GUESS, payload: '123'})
     expect(harness.spy.calls.length).toBe(1)
-    expect(keyPress.preventDefault).toHaveBeenCalled()
   })
 
   it('auto-detects correct answer', () => {
     const harness = new Harness(getProblemState('1234'))
-    harness.dispatch(actions.problemKeyPress(mockKeyPressEvent('5')))
+    harness.dispatch(actions.challengeKeyPress('5'))
     expect(harness.spy).toHaveBeenCalledWith(actions.setGuess('12345'))
     expect(harness.spy).toHaveBeenCalledWith(actions.setFinished(FINISHED.correct))
     expect(harness.spy.calls.length).toBe(2)
@@ -180,7 +168,7 @@ describe('problemKeyPress', () => {
 
   it('auto-detects wrong answer', () => {
     const harness = new Harness(getProblemState('1234'))
-    harness.dispatch(actions.problemKeyPress(mockKeyPressEvent('9')))
+    harness.dispatch(actions.challengeKeyPress('9'))
     expect(harness.spy).toHaveBeenCalledWith(actions.setGuess('12349'))
     expect(harness.spy).toHaveBeenCalledWith(actions.setFinished(FINISHED.incorrect))
     expect(harness.spy.calls.length).toBe(2)
@@ -188,14 +176,14 @@ describe('problemKeyPress', () => {
 
   it('accepts enter to submit current guess', () => {
     const harness = new Harness(getProblemState(''))
-    harness.dispatch(actions.problemKeyPress(mockKeyPressEvent('Enter')))
+    harness.dispatch(actions.challengeKeyPress('Enter'))
     expect(harness.spy).toHaveBeenCalledWith(actions.setFinished(FINISHED.incorrect))
     expect(harness.spy.calls.length).toBeLessThan(3) // ok if guess is set again
   })
 
   it('accepts space to submit current guess', () => {
     const harness = new Harness(getProblemState(''))
-    harness.dispatch(actions.problemKeyPress(mockKeyPressEvent('Spacebar')))
+    harness.dispatch(actions.challengeKeyPress('Spacebar'))
     expect(harness.spy).toHaveBeenCalledWith(actions.setFinished(FINISHED.incorrect))
     expect(harness.spy.calls.length).toBeLessThan(3) // ok if guess is set again
   })

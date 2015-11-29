@@ -31,6 +31,7 @@ export class App extends React.Component {
         game={this.props.state.game}
         quitGame={this.props.quitGame}
         newProblem={this.props.newProblem}
+        challengeKeyPress={this.props.challengeKeyPress}
       />
     } else {
       screen = <h1>Error, Unknown Mode</h1>

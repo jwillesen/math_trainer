@@ -38,10 +38,9 @@ export default class Flashcard extends React.Component {
           bottomOperand={this.props.game.problem.operands[1]}
           operator={this.props.game.problem.operator}
           answer={this.props.game.problem.answer}
-          showAnswer={this.props.game.showAnswer}
+          answerClassNames={{visible: this.props.game.showAnswer}}
         />
       </div>
     )
   }
 }
-
