@@ -1,7 +1,7 @@
 import {combineReducers} from 'redux'
 import {handleActions} from 'redux-actions'
 import * as actions from './actions'
-import {MODES, OPERATORS} from './constants'
+import {MODES, OPERATORS, FINISHED} from './constants'
 
 const defaultOperands = [5, 5]
 
@@ -54,6 +54,18 @@ export const configurationReducers = {
   }, defaultOperators),
 }
 
+export const challengeReducers = {
+  guess: handleActions({
+    [actions.SET_GUESS]: fsaIdentity,
+    [actions.NEW_PROBLEM]: () => '',
+  }, ''),
+
+  finished: handleActions({
+    [actions.SET_FINISHED]: fsaIdentity,
+    [actions.NEW_PROBLEM]: () => FINISHED.unfinished,
+  }, FINISHED.unfinished),
+}
+
 export const gameReducers = {
   problem: handleActions({
     [actions.NEW_PROBLEM]: fsaIdentity,
@@ -63,6 +75,8 @@ export const gameReducers = {
     [actions.TOGGLE_SHOW_ANSWER]: state => !state,
     [actions.NEW_PROBLEM]: () => false,
   }, false),
+
+  challenge: combineReducers(challengeReducers),
 
   time: handleActions({
     [actions.START_GAME]: resetTimer,
@@ -80,5 +94,5 @@ export const reducers = {
   }, MODES.configure),
 }
 
-const reducer = combineReducers(reducers)
-export default reducer
+const combinedReducer = combineReducers(reducers)
+export default combinedReducer

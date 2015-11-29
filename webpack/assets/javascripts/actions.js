@@ -1,7 +1,7 @@
 import {createAction} from 'redux-actions'
 import Chance from 'chance'
 import deepEqual from 'deep-equal'
-import {OPERATORS} from './constants'
+import {MODES, OPERATORS, FINISHED} from './constants'
 
 const stdrng = new Chance()
 
@@ -83,6 +83,7 @@ export function generateDivisionProblem (configuration, rng) {
 }
 
 export const NEW_PROBLEM = 'NEW_PROBLEM'
+export const rawNewProblem = createAction(NEW_PROBLEM)
 export function newProblem () {
   return (dispatch, getState) => {
     const state = getState()
@@ -116,3 +117,53 @@ export const toggleShowAnswer = createAction(TOGGLE_SHOW_ANSWER)
 
 export const CHANGE_GAME_MODE = 'CHANGE_GAME_MODE'
 export const changeGameMode = createAction(CHANGE_GAME_MODE)
+
+export const SET_GUESS = 'SET_GUESS'
+export const setGuess = createAction(SET_GUESS)
+
+export const SET_FINISHED = 'SET_FINISHED'
+export const setFinished = createAction(SET_FINISHED)
+
+const checkGuess = (guess, forceCheck, dispatch, getState) => {
+  const answer = getState().game.problem.answer.toString()
+  if (guess === answer) {
+    dispatch(setFinished(FINISHED.correct))
+  } else if (forceCheck || guess.length === answer.length) {
+    dispatch(setFinished(FINISHED.incorrect))
+  }
+}
+
+const handleKey = (key, dispatch, getState) => {
+  const currentGuess = getState().game.challenge.guess
+  let newGuess = null
+  let forceCheck = false
+  if (/^\d$/.test(key)) {
+    newGuess = currentGuess.concat(key)
+  } else if (key === 'Escape') {
+    newGuess = ''
+  } else if (key === 'Backspace') {
+    newGuess = currentGuess.slice(0, -1)
+  } else if (key === 'Enter' || key === 'Spacebar') {
+    newGuess = currentGuess
+    forceCheck = true
+  }
+
+  if (typeof newGuess === 'string') {
+    dispatch(setGuess(newGuess))
+    checkGuess(newGuess, forceCheck, dispatch, getState)
+    return true
+  }
+  return null
+}
+
+export const PROBLEM_KEY_PRESS = 'PROBLEM_KEY_PRESS'
+export const problemKeyPress = (keyPressEvent) => {
+  return (dispatch, getState) => {
+    const state = getState()
+    if (state.configuration.gameMode === MODES.challenge) {
+      if (handleKey(keyPressEvent.key, dispatch, getState)) {
+        keyPressEvent.preventDefault()
+      }
+    }
+  }
+}

@@ -1,13 +1,12 @@
 /* eslint-env mocha */
 
 import expect from 'expect'
-import {MODES, OPERATORS} from 'constants'
+import {MODES, OPERATORS, FINISHED} from 'constants'
 import * as actions from 'actions'
 import reducer from 'reducer'
-const startGame = actions.startGame
-const generateRandomProblem = actions.generateRandomProblem
+import Harness from './action-dispatch-harness'
 
-const defaultState = reducer(undefined, {type: 'blah'})
+const defaultState = () => reducer(undefined, {type: 'blah'})
 
 function fakeRng (...numbers) {
   const numberGenerator = function * () {
@@ -21,16 +20,11 @@ function fakeRng (...numbers) {
 
 describe('startGame', () => {
   it('creates a new problem and sets mode to configured game mode', () => {
-    const dispatch = expect.createSpy()
-    const getState = () => defaultState
-    startGame()(dispatch, getState)
-    expect(dispatch.calls.length).toBe(2)
-    const actionFunction = dispatch.calls[0].arguments[0]
-    actionFunction(dispatch, getState)
-    expect(dispatch.calls.length).toBe(3)
-    expect(typeof actionFunction).toBe('function')
-    expect(dispatch.calls[1].arguments[0]).toEqual({type: actions.START_GAME, payload: MODES.flashcard})
-    expect(dispatch.calls[2].arguments[0].type).toBe(actions.NEW_PROBLEM)
+    const harness = new Harness(defaultState())
+    harness.dispatch(actions.startGame())
+    expect(harness.spy.calls.length).toBe(2)
+    expect(harness.spy).toHaveBeenCalledWith({type: actions.START_GAME, payload: MODES.flashcard})
+    expect(harness.spy.calls.map((call) => call.arguments[0].type)).toInclude(actions.NEW_PROBLEM)
   })
 })
 
@@ -38,43 +32,43 @@ describe('generateRandomProblem', () => {
   it('generates operands in the desired range', () => {
     const spyRng = {integer () {}}
     const spy = expect.spyOn(spyRng, 'integer').andReturn(1)
-    const result = generateRandomProblem({operands: [3, 4], operators: {[OPERATORS.plus]: true}}, {}, spyRng)
+    const result = actions.generateRandomProblem({operands: [3, 4], operators: {[OPERATORS.plus]: true}}, {}, spyRng)
     expect(spy.calls.length).toBe(2)
-    expect(spy.calls[0].arguments).toEqual([{min: 1, max: 3}])
-    expect(spy.calls[1].arguments).toEqual([{min: 1, max: 4}])
+    expect(spy).toHaveBeenCalledWith({min: 1, max: 3})
+    expect(spy).toHaveBeenCalledWith({min: 1, max: 4})
     expect(result.operands).toEqual([1, 1])
   })
 
   it('copies the operator', () => {
-    const result = generateRandomProblem({operands: [3, 4], operators: {[OPERATORS.plus]: true}}, {})
+    const result = actions.generateRandomProblem({operands: [3, 4], operators: {[OPERATORS.plus]: true}}, {})
     expect(result.operator).toBe(OPERATORS.plus)
   })
 
   it('generates the answer to a plus operator', () => {
-    const result = generateRandomProblem({operands: [5, 5], operators: {[OPERATORS.plus]: true}}, {}, fakeRng(1, 2))
+    const result = actions.generateRandomProblem({operands: [5, 5], operators: {[OPERATORS.plus]: true}}, {}, fakeRng(1, 2))
     expect(result.answer).toBe(3)
   })
 
   it('generates the answer to a minus operator', () => {
-    const result = generateRandomProblem({operands: [5, 5], operators: {[OPERATORS.minus]: true}}, {}, fakeRng(2, 1))
+    const result = actions.generateRandomProblem({operands: [5, 5], operators: {[OPERATORS.minus]: true}}, {}, fakeRng(2, 1))
     expect(result.answer).toBe(1)
     expect(result.operator).toBe(OPERATORS.minus)
   })
 
   it('reverses operands if answer would be negative', () => {
-    const result = generateRandomProblem({operands: [5, 5], operators: {[OPERATORS.minus]: true}}, {}, fakeRng(2, 3))
+    const result = actions.generateRandomProblem({operands: [5, 5], operators: {[OPERATORS.minus]: true}}, {}, fakeRng(2, 3))
     expect(result.operands).toEqual([3, 2])
     expect(result.answer).toBe(1)
   })
 
   it('generates the answer to a times operator', () => {
-    const result = generateRandomProblem({operands: [5, 5], operators: {[OPERATORS.times]: true}}, {}, fakeRng(3, 4))
+    const result = actions.generateRandomProblem({operands: [5, 5], operators: {[OPERATORS.times]: true}}, {}, fakeRng(3, 4))
     expect(result.answer).toBe(12)
     expect(result.operator).toBe(OPERATORS.times)
   })
 
   it('avoids generating the same problem twice', () => {
-    const result = generateRandomProblem(
+    const result = actions.generateRandomProblem(
       {operands: [5, 5], operators: {[OPERATORS.plus]: true}},
       {operands: [1, 2], operator: OPERATORS.plus, answer: 3},
       fakeRng(1, 2, 1, 2, 1, 2, 3, 4)
@@ -84,7 +78,7 @@ describe('generateRandomProblem', () => {
   })
 
   it('does not have an infinte loop avoiding duplicate problems', () => {
-    const result = generateRandomProblem(
+    const result = actions.generateRandomProblem(
       {operands: [5, 5], operators: {[OPERATORS.plus]: true}},
       {operands: [1, 2], operator: OPERATORS.plus, answer: 3},
       fakeRng(
@@ -99,7 +93,7 @@ describe('generateRandomProblem', () => {
   })
 
   it('selects from a set of operators', () => {
-    const result = generateRandomProblem({
+    const result = actions.generateRandomProblem({
       operands: [5, 5],
       operators: {[OPERATORS.plus]: false, [OPERATORS.minus]: true, [OPERATORS.times]: true},
     }, {}, fakeRng(1, 2, 2))
@@ -108,10 +102,101 @@ describe('generateRandomProblem', () => {
   })
 
   it('uses plus if no operators are selected', () => {
-    const result = generateRandomProblem({
+    const result = actions.generateRandomProblem({
       operands: [5, 5],
       operators: {[OPERATORS.plus]: false, [OPERATORS.minus]: false, [OPERATORS.times]: false},
     }, {}, fakeRng(1, 2))
     expect(result.operator).toBe(OPERATORS.plus)
+  })
+})
+
+const getProblemState = (currentGuess = '') => {
+  const result = defaultState()
+  result.configuration.gameMode = MODES.challenge
+  result.game.problem = {
+    operands: [1, 1],
+    operator: OPERATORS.plus,
+    answer: 12345,
+  }
+  result.game.challenge.guess = currentGuess
+  return result
+}
+
+const mockKeyPressEvent = (key) => ({key, preventDefault: expect.createSpy()})
+
+describe('problemKeyPress', () => {
+  it('appends digits', () => {
+    const keyPress = mockKeyPressEvent('2')
+    const harness = new Harness(getProblemState('1'))
+    harness.dispatch(actions.problemKeyPress(keyPress))
+    expect(harness.spy).toHaveBeenCalledWith({type: actions.SET_GUESS, payload: '12'})
+    expect(harness.spy.calls.length).toBe(1)
+    expect(keyPress.preventDefault).toHaveBeenCalled()
+  })
+
+  it('ignores digits when mode is not challenge', () => {
+    const state = getProblemState()
+    state.configuration.gameMode = MODES.flashcard
+    const keyPress = mockKeyPressEvent('1')
+    const harness = new Harness(state)
+    harness.dispatch(actions.problemKeyPress(keyPress))
+    expect(harness.spy).toNotHaveBeenCalled()
+    expect(keyPress.preventDefault).toNotHaveBeenCalled()
+  })
+
+  it('ignores non-digits', () => {
+    const keyPress = mockKeyPressEvent('Tab')
+    const harness = new Harness(getProblemState())
+    harness.dispatch(actions.problemKeyPress(keyPress))
+    expect(harness.spy).toNotHaveBeenCalled()
+    expect(keyPress.preventDefault).toNotHaveBeenCalled()
+  })
+
+  it('clears on escape', () => {
+    const keyPress = mockKeyPressEvent('Escape')
+    const harness = new Harness(getProblemState('1234'))
+    harness.dispatch(actions.problemKeyPress(keyPress))
+    expect(harness.spy).toHaveBeenCalledWith({type: actions.SET_GUESS, payload: ''})
+    expect(harness.spy.calls.length).toBe(1)
+    expect(keyPress.preventDefault).toHaveBeenCalled()
+  })
+
+  it('removes last digit on backspace', () => {
+    const keyPress = mockKeyPressEvent('Backspace')
+    const harness = new Harness(getProblemState('1234'))
+    harness.dispatch(actions.problemKeyPress(keyPress))
+    expect(harness.spy).toHaveBeenCalledWith({type: actions.SET_GUESS, payload: '123'})
+    expect(harness.spy.calls.length).toBe(1)
+    expect(keyPress.preventDefault).toHaveBeenCalled()
+  })
+
+  it('auto-detects correct answer', () => {
+    const harness = new Harness(getProblemState('1234'))
+    harness.dispatch(actions.problemKeyPress(mockKeyPressEvent('5')))
+    expect(harness.spy).toHaveBeenCalledWith(actions.setGuess('12345'))
+    expect(harness.spy).toHaveBeenCalledWith(actions.setFinished(FINISHED.correct))
+    expect(harness.spy.calls.length).toBe(2)
+  })
+
+  it('auto-detects wrong answer', () => {
+    const harness = new Harness(getProblemState('1234'))
+    harness.dispatch(actions.problemKeyPress(mockKeyPressEvent('9')))
+    expect(harness.spy).toHaveBeenCalledWith(actions.setGuess('12349'))
+    expect(harness.spy).toHaveBeenCalledWith(actions.setFinished(FINISHED.incorrect))
+    expect(harness.spy.calls.length).toBe(2)
+  })
+
+  it('accepts enter to submit current guess', () => {
+    const harness = new Harness(getProblemState(''))
+    harness.dispatch(actions.problemKeyPress(mockKeyPressEvent('Enter')))
+    expect(harness.spy).toHaveBeenCalledWith(actions.setFinished(FINISHED.incorrect))
+    expect(harness.spy.calls.length).toBeLessThan(3) // ok if guess is set again
+  })
+
+  it('accepts space to submit current guess', () => {
+    const harness = new Harness(getProblemState(''))
+    harness.dispatch(actions.problemKeyPress(mockKeyPressEvent('Spacebar')))
+    expect(harness.spy).toHaveBeenCalledWith(actions.setFinished(FINISHED.incorrect))
+    expect(harness.spy.calls.length).toBeLessThan(3) // ok if guess is set again
   })
 })

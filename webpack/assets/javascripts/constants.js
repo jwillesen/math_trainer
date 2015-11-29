@@ -10,3 +10,9 @@ export const OPERATORS = {
   times: 'x', // multiplication sign
   divide: '÷', // division sign
 }
+
+export const FINISHED = {
+  unfinished: 'unfinished',
+  correct: 'correct',
+  incorrect: 'incorrect',
+}

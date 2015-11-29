@@ -1,9 +1,13 @@
 /* eslint-env mocha */
 
 import expect from 'expect'
-import {OPERATORS} from 'constants'
+import {FINISHED, OPERATORS} from 'constants'
 import * as actions from 'actions'
-import {configurationReducers} from 'reducer'
+import reducer, {configurationReducers} from 'reducer'
+
+const defaultState = () => {
+  return reducer(undefined, {type: '~~~blah~~~'})
+}
 
 describe('configuration.operands', () => {
   const defaultOperators = configurationReducers.operators(undefined, {type: 'test-init'})
@@ -19,5 +23,25 @@ describe('configuration.operands', () => {
     const nextOperands = configurationReducers.operators(defaultOperators, actions.toggleOperator(OPERATORS.minus))
     expect(nextOperands[OPERATORS.minus]).toExist()
   })
+})
 
+const guessProblemState = (guess = '') => {
+  const state = defaultState()
+  state.game.challenge.guess = guess
+  return state
+}
+
+describe('challenge reducers', () => {
+  it('resets guess on new problem', () => {
+    const state = guessProblemState('42')
+    const nextState = reducer(state, actions.rawNewProblem(state.game.problem))
+    expect(nextState.game.challenge.guess).toBe('')
+  })
+
+  it('resets finished on new problem', () => {
+    const state = guessProblemState('42')
+    state.game.challenge.finished = FINISHED.correct
+    const nextState = reducer(state, actions.rawNewProblem(state.game.problem))
+    expect(nextState.game.challenge.finished).toBe(FINISHED.unfinished)
+  })
 })
