@@ -1,3 +1,5 @@
+/* global VERSION */
+
 require('configuration.scss')
 
 import React, {PropTypes} from 'react'
@@ -25,7 +27,7 @@ export default class Configuration extends React.Component
   render () {
     return (
       <div className='configuration'>
-        <h1>Welcome to Math Trainer</h1>
+        <h1>Welcome to Math Trainer <small>version {VERSION}</small></h1>
 
         <Input type='select' label='Select Mode' value={this.props.configuration.gameMode}
           onChange={this.onChangeGameMode.bind(this)} ref='gameMode'>

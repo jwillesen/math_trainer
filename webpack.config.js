@@ -1,5 +1,6 @@
 var path = require('path')
 var autoprefixer = require('autoprefixer')
+var webpack = require('webpack')
 
 module.exports = {
   // context: __dirname,
@@ -21,6 +22,12 @@ module.exports = {
   postcss: function () {
     return [autoprefixer]
   },
+
+  plugins: [
+    new webpack.DefinePlugin({
+      VERSION: JSON.stringify(require('./package.json').version),
+    }),
+  ],
 
   module: {
     preLoaders: [
