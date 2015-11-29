@@ -39,13 +39,11 @@ export default class Challenge extends React.Component {
       newProblem: PropTypes.func.isRequired,
       quitGame: PropTypes.func.isRequired,
       challengeKeyPress: PropTypes.func.isRequired,
-      timerIntervalMs: PropTypes.number,
     }
   }
 
   static get defaultProps () {
     return {
-      timerIntervalMs: 500,
     }
   }
 
