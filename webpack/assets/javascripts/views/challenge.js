@@ -35,26 +35,37 @@ const keyCodeMap = {
 export default class Challenge extends React.Component {
   static get propTypes () {
     return {
+      // required
       game: PropTypes.object.isRequired,
       newProblem: PropTypes.func.isRequired,
       quitGame: PropTypes.func.isRequired,
       challengeKeyPress: PropTypes.func.isRequired,
+
+      // optional
+      finishedTimeoutMillis: PropTypes.number, // in millis
     }
   }
 
   static get defaultProps () {
     return {
+      finishedTimeoutMillis: 1000,
     }
   }
 
   componentDidMount () {
     this.keyListener = this.handleKey.bind(this)
     document.addEventListener('keydown', this.keyListener)
+    this.checkFinishedTimer()
   }
 
   componentWillUnmount () {
     document.removeEventListener('keydown', this.keyListener)
     this.keyListener = null
+    this.cancelFinishedTimer()
+  }
+
+  componentDidUpdate () {
+    this.checkFinishedTimer()
   }
 
   handleKey (event) {
@@ -65,6 +76,32 @@ export default class Challenge extends React.Component {
         this.props.challengeKeyPress(keyname)
       }
     }
+  }
+
+  checkFinishedTimer () {
+    if (this.props.game.challenge.finished === FINISHED.unfinished) {
+      this.cancelFinishedTimer()
+    } else {
+      this.startFinishedTimer()
+    }
+  }
+
+  cancelFinishedTimer () {
+    if (this.finishedTimer) {
+      window.clearTimeout(this.finishedTimer)
+      this.finishedTimer = null
+    }
+  }
+
+  startFinishedTimer () {
+    if (!this.finishedTimer) {
+      this.finishedTimer = window.setTimeout(() => this.finishedTimeout(), this.props.finishedTimeoutMillis)
+    }
+  }
+
+  finishedTimeout () {
+    this.finishedTimer = null
+    this.props.newProblem()
   }
 
   render () {
