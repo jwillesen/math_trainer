@@ -53,7 +53,7 @@ export default class Challenge extends React.Component {
   }
 
   componentWillUnmount () {
-    document.removeEventListener(this.keyListener)
+    document.removeEventListener('keydown', this.keyListener)
     this.keyListener = null
   }
 
