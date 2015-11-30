@@ -12,7 +12,9 @@
     "lint": "eslint --ext .js,.jsx webpack",
     "pack": "webpack --progress --colors -d",
     "pack:watch": "webpack --watch -d",
-    "prod": "webpack --progress --colors -p"
+    "pack:prod": "webpack --progress --colors -p",
+    "deploy-gh": "script/deploy-gh",
+    "clean": "rm -rf public/assets tmp"
   },
   "repository": {
     "type": "git",

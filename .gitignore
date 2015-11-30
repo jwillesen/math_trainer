@@ -3,3 +3,4 @@ public/assets
 *.sublime-workspace
 node_modules
 npm-debug.log
+tmp

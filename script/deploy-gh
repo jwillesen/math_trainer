@@ -1,0 +1,91 @@
+#!/usr/bin/env node --use_strict
+
+const DEPLOY_PATH = './tmp/deploy'
+const VERSION = require('../package.json').version
+
+const spawn = require('child_process').spawnSync
+
+const system = (cmd, args, options) => {
+  const defaultOptions = {stdio: 'inherit'}
+  options = Object.assign({}, defaultOptions, options || {})
+  args = args || []
+  let log = [cmd, ...args]
+  if (typeof options.cwd === 'string') {
+    log.unshift('(in ' + options.cwd + ')')
+  }
+  console.log(...log)
+  const result = spawn(cmd, args, options)
+  if (result.error) {
+    console.error('Error:', result.error.message)
+    process.exit(1)
+  } else if (result.status !== 0) {
+    process.exit(result.status)
+  }
+
+  return result
+}
+
+const capture = (cmd, args, options) => {
+  const defaultOptions = {
+    stdio: [process.stdin, 'pipe', process.stderr],
+  }
+  options = Object.assign({}, defaultOptions, options || {})
+  const result = system(cmd, args, options)
+  return result.stdout.toString().trim()
+}
+
+const deployGit = (args, options) => {
+  const defaultOptions = {cwd: DEPLOY_PATH}
+  options = Object.assign({}, defaultOptions, options || {})
+  return system('git', args, options)
+}
+
+const pushDeploy = () => {
+  const args = process.argv.slice(2)
+  if (args.length === 0 || args[0] !== '--push') {
+    pushReady()
+    return
+  }
+
+  const rl = require('readline').createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  })
+  const prompt = 'push ' + VERSION + ' now?' +
+    '\n(anything other than \'yes\' will not push)' +
+    '\n> '
+  rl.question(prompt, (response) => {
+    rl.close()
+    if (response.trim() === 'yes') {
+      deployGit(['push', 'origin', 'gh-pages'])
+    } else {
+      pushReady()
+    }
+  })
+}
+
+const pushReady = () => {
+  console.log('repository at', DEPLOY_PATH, 'is ready to push')
+}
+
+const main = () => {
+  const originUrl = capture('git', ['config', '--get', 'remote.origin.url'])
+  console.log('origin is', originUrl)
+
+  system('npm', ['run', 'clean'])
+  system('npm', ['run', 'pack:prod'])
+
+  system('git', ['fetch'])
+  system('git', ['branch', '-f', 'gh-pages', 'origin/gh-pages'])
+
+  system('mkdir', ['-p', DEPLOY_PATH])
+  system('git', ['clone', '-b', 'gh-pages', '.', DEPLOY_PATH])
+
+  system('cp', ['-Rv', 'public/', DEPLOY_PATH])
+
+  deployGit(['remote', 'set-url', 'origin', originUrl])
+  deployGit(['commit', '-a', '-m', 'deploy verion ' + VERSION])
+  pushDeploy()
+}
+
+main()
