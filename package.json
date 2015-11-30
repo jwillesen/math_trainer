@@ -1,6 +1,6 @@
 {
   "name": "math_trainer",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "practice math facts",
   "main": "index.js",
   "directories": {
