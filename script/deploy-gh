@@ -84,7 +84,7 @@ const main = () => {
   system('cp', ['-Rv', 'public/', DEPLOY_PATH])
 
   deployGit(['remote', 'set-url', 'origin', originUrl])
-  deployGit(['commit', '-a', '-m', 'deploy verion ' + VERSION])
+  deployGit(['commit', '-a', '-m', 'deploy v' + VERSION])
   pushDeploy()
 }
 
